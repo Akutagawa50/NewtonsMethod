@@ -4,6 +4,7 @@
 using namespace std;
 
 ofstream of;
+const double x0 = 3;            //関数に与える初期値
 const double eps = 0.000001;    //許容誤差
 int funcmode = 0;   //解析する関数を選ぶ変数
 
@@ -48,9 +49,10 @@ bool NewtonRaphsonMethod(double *x, int nmax){
         cout << "オープンエラー" << endl;
         return false;
     }
+    
     //初期値をファイルとコンソールに出力
     of << *x << "\t" << fixed << func(funcmode, *x) << endl;
-    cout << *x << endl;
+    cout << "x= " <<*x << "\tf(x)= " << func(funcmode, *x) << endl;
 
     //Newton法で計算
     do{
@@ -60,7 +62,7 @@ bool NewtonRaphsonMethod(double *x, int nmax){
 
         //値をファイルとコンソールに出力
         of << *x << "\t" << func(funcmode, *x) << endl;
-        cout << *x << endl;
+        cout << "x= " <<*x << "\tf(x)= " << func(funcmode, *x) << endl;
 
         if(fabs(func(funcmode, *x))<eps){    //収束したら終了
             of.close();
@@ -73,11 +75,11 @@ bool NewtonRaphsonMethod(double *x, int nmax){
 }
 
 int main(void){
-    double x=3.0;
+    double x=x0;
     if(NewtonRaphsonMethod(&x, 100)){
         cout << "収束しました"<< endl;
         cout << "x = " << x << endl;
-        cout << "f(x) = " << func(funcmode, x) << endl;
+        cout << "f(x) = " << fixed << func(funcmode, x) << endl;
     }
     else
         cout << "収束しませんでした" << endl;
