@@ -4,9 +4,10 @@
 using namespace std;
 
 ofstream of;
-const double x0 = 3;            //関数に与える初期値
+const double x0 = -1;           //関数に与える初期値
+const double h = 0.01;          //数値微分時のパラメータ
 const double eps = 0.000001;    //許容誤差
-int funcmode = 0;   //解析する関数を選ぶ変数
+int funcmode = 2;   //解析する関数を選ぶ変数
 
 float func(int mode, double x){ //f(x)の中身　funcmodeの値で変わる
     switch (mode){
@@ -23,7 +24,7 @@ float func(int mode, double x){ //f(x)の中身　funcmodeの値で変わる
 }
 
 float dfunc(int mode, double x){    //funcを数値微分したものを返す
-    return (func(mode, x+eps)-func(mode, x))/eps;
+    return (func(mode, x+h)-func(mode, x))/h;
 }
 
 bool NewtonRaphsonMethod(double *x, int nmax){
@@ -51,8 +52,8 @@ bool NewtonRaphsonMethod(double *x, int nmax){
     }
     
     //初期値をファイルとコンソールに出力
-    of << *x << "\t" << fixed << func(funcmode, *x) << endl;
-    cout << "x= " <<*x << "\tf(x)= " << func(funcmode, *x) << endl;
+    of << *x << ", " << fixed << func(funcmode, *x) << ", " << dfunc(funcmode, *x) << endl;
+    cout << "計算前: x= " <<*x << "\tf(x)= " << func(funcmode, *x) << "\tf'(x)=" << dfunc(funcmode, *x) << endl;
 
     //Newton法で計算
     do{
@@ -61,14 +62,13 @@ bool NewtonRaphsonMethod(double *x, int nmax){
         *x=-fx/dfx + *x;    //y=0との交点をxに代入
 
         //値をファイルとコンソールに出力
-        of << *x << "\t" << func(funcmode, *x) << endl;
-        cout << "x= " <<*x << "\tf(x)= " << func(funcmode, *x) << endl;
+        of << *x << ", " << fixed << func(funcmode, *x) << ", " << dfunc(funcmode, *x) << endl;
+        cout << ++n << "回目: x= " <<*x << "\tf(x)= " << func(funcmode, *x) << "\tf'(x)=" << dfunc(funcmode, *x) << endl;
 
         if(fabs(func(funcmode, *x))<eps){    //収束したら終了
             of.close();
             return true;
         }
-        n++;
     }while(n<nmax);
     of.close();
     return false;
@@ -78,8 +78,8 @@ int main(void){
     double x=x0;
     if(NewtonRaphsonMethod(&x, 100)){
         cout << "収束しました"<< endl;
-        cout << "x = " << x << endl;
-        cout << "f(x) = " << fixed << func(funcmode, x) << endl;
+        //cout << "x = " << x << endl;
+        //cout << "f(x) = " << fixed << func(funcmode, x) << endl;
     }
     else
         cout << "収束しませんでした" << endl;
