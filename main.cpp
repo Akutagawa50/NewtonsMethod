@@ -7,7 +7,21 @@ ofstream of;
 const double x0 = -1;           //関数に与える初期値
 const double h = 0.01;          //数値微分時のパラメータ
 const double eps = 0.000001;    //許容誤差
-int funcmode = 2;   //解析する関数を選ぶ変数
+
+/*--解析する関数を選ぶ変数--//
+funcmode == 0
+    f(x) = x + cos x
+
+funcmode == 1
+    f(x) = (x-7.53)^2 - 3.15
+
+funcmode == 2
+    f(x) = e^x-5
+
+else
+    f(x) = 9999
+//------------------------*/
+int funcmode = 2;   
 
 float func(int mode, double x){ //f(x)の中身　funcmodeの値で変わる
     switch (mode){
